@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +17,18 @@ namespace Ocelot.Provider.UriDiscovery.Client
     {
         private readonly ILogger<UriDiscoveryClient> _logger;
         private readonly HttpClient _client;
+        private readonly UriDiscoveryConfiguration _options;
         private readonly IUriDiscoveryTransformation _transformation;
 
         public UriDiscoveryClient(
             ILogger<UriDiscoveryClient> logger, 
             HttpClient client,
+            IOptions<UriDiscoveryConfiguration> options,
             IUriDiscoveryTransformation transformation)
         {
             _logger = logger;
             _client = client;
+            _options = options.Value;
             _transformation = transformation;
         }
 
@@ -32,7 +36,8 @@ namespace Ocelot.Provider.UriDiscovery.Client
         {
             try
             {
-                var response = await _client.GetAsync(serviceName);
+                string uri = string.IsNullOrEmpty(_options.Uri) ? serviceName: $"{_options.Uri}/{serviceName}";
+                var response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {
                     var uriArray = await _transformation.Transform(response);

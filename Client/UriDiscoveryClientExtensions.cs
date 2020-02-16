@@ -16,7 +16,7 @@ namespace Ocelot.Provider.UriDiscovery.Client
             services.AddSingleton<IUriDiscoveryTransformation>(transformation);
             services.AddHttpClient<IUriDiscoveryClient, UriDiscoveryClient>((provider, client) =>
             {
-                client.BaseAddress = new Uri(provider.GetService<IOptions<UriDiscoveryConfiguration>>().Value.ServiceUri);
+                client.BaseAddress = new Uri(provider.GetService<IOptions<UriDiscoveryConfiguration>>().Value.BaseAddress);
             });
 
             return services;

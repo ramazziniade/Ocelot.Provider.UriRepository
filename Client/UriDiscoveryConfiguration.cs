@@ -6,6 +6,7 @@ namespace Ocelot.Provider.UriDiscovery.Client
 {
     public class UriDiscoveryConfiguration
     {
-        public string ServiceUri { get; set; }
+        public string BaseAddress { get; set; }
+        public string Uri { get; set; }
     }
 }
